@@ -1,13 +1,15 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
+@Builder
 public class User {
-    @NotNull(message="ID can't be null")
+    @PositiveOrZero(message = "ID can't be negative")
     private long id;
     @NotEmpty(message = "Email can't be empty")
     @Email(message = "Enter correct email format")

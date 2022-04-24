@@ -5,8 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,23 +17,26 @@ public class UserController {
 
     @GetMapping("/users")
     public List<User> findAllUsers() {
-        return (List<User>) map.values();
+        log.info("Получен запрос к эндпоинту: GET /users");
+        List<User> list = new ArrayList<>();
+        list.addAll(map.values());
+        return list;
     }
 
-    @PostMapping("/user")
-    public void create(@Validated @RequestBody User user, HttpServletRequest request) {
-        log.info("Получен запрос к эндпоинту: '{} {}', Строка параметров запроса: '{}'",
-                request.getMethod(), request.getRequestURI(), request.getQueryString());
-        if(user.getName().isEmpty()){
+    @PostMapping("/users")
+    public void create(@Validated @RequestBody User user) {
+        log.info("Получен запрос к эндпоинту: POST /users, Строка параметров запроса: '{}'",
+                user.toString());
+        if (user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
         map.put(user.getId(), user);
     }
 
-    @PutMapping("/user")
-    public void update(@Validated @RequestBody User user, HttpServletRequest request) {
-        log.info("Получен запрос к эндпоинту: '{} {}', Строка параметров запроса: '{}'",
-                request.getMethod(), request.getRequestURI(), request.getQueryString());
+    @PutMapping("/users")
+    public void update(@Validated @RequestBody User user) {
+        log.info("Получен запрос к эндпоинту: PUT /users, Строка параметров запроса: '{}'",
+                user.toString());
         map.put(user.getId(), user);
     }
 }
